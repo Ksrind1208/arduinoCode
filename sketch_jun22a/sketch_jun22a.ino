@@ -85,12 +85,12 @@ class Robot{
     x = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * cos(q1 * pi / 180);
     y = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * sin(q1 * pi / 180);
     z = l2 * sin(q2 * pi / 180) + l3 * sin((q2 + q3) * pi / 180) + 6.5;
-    // Serial.print("x  la: ");
-    // Serial.println(x);
-    // Serial.print("y la: ");
-    // Serial.println(y);
-    // Serial.print("z la: ");
-    // Serial.println(z);
+    Serial.print("x  la: ");
+    Serial.println(x);
+    Serial.print("y la: ");
+    Serial.println(y);
+    Serial.print("z la: ");
+    Serial.println(z);
     }
     void movex() {
     int q1 = myservo1.read();
@@ -239,39 +239,39 @@ class Robot{
     q(round(q1), round(q2), round(q3), myservo4.read());
     }
     void line(float xa, float ya, float za, float xb, float yb, float zb) {
-    kg(xa, ya, za);
-    delay(500);
-    for (float t = 0; t <= 1.0; t += 0.1) {  // Chia nhỏ cung tròn thành các đoạn nhỏ
-      digitalWrite(trigPin, LOW);
-      delayMicroseconds(2);
-      digitalWrite(trigPin, HIGH);
-      delayMicroseconds(10);
-      digitalWrite(trigPin, LOW);
-      float duration = pulseIn(echoPin, HIGH);
-      float distance = (duration / 2) * 0.0343;
-      if (distance < 10.0) {
-        stopAllServos();
-        ngat();
+      kg(xa, ya, za);
+      delay(500);
+      for (float t = 0; t <= 1.0; t += 0.1) {  // Chia nhỏ đường thẳng thành các đoạn nhỏ
         digitalWrite(trigPin, LOW);
         delayMicroseconds(2);
         digitalWrite(trigPin, HIGH);
         delayMicroseconds(10);
         digitalWrite(trigPin, LOW);
-        duration = pulseIn(echoPin, HIGH);
-        distance = (duration / 2) * 0.0343;
+        float duration = pulseIn(echoPin, HIGH);
+        float distance = (duration / 2) * 0.0343;
+        if (distance < 10.0) {
+          stopAllServos();
+          ngat();
+          digitalWrite(trigPin, LOW);
+          delayMicroseconds(2);
+          digitalWrite(trigPin, HIGH);
+          delayMicroseconds(10);
+          digitalWrite(trigPin, LOW);
+          duration = pulseIn(echoPin, HIGH);
+          distance = (duration / 2) * 0.0343;
+        } else {
+          resumeAllServos();
+          // Serial.println("hd lai ne....");
+        }
+        float xt = xa + (xb - xa) * t;
+        float yt = ya + (yb - ya) * t;
+        float zt = za + (zb - za) * t;
+        kg(xt, yt, zt);
+        delay(10);
       }
-      else{
-      resumeAllServos();
-      // Serial.println("hd lai ne....");
-      }
-      float xt = xa + (xb - xa) * t;
-      float yt = ya + (yb - ya) * t;
-      float zt = za + (zb - za) * t;
-      kg(xt, yt, zt);
+      kg(xb,yb,zb);
       delay(10);
-    }
-
-    delay(10);
+      
     }
 
     void circle(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
@@ -481,9 +481,9 @@ void loop() {
       tx = Serial.readStringUntil(';');
       ty = Serial.readStringUntil(';');
       tz = Serial.readStringUntil('\n');
-      x = tx.toInt();
-      y = ty.toInt();
-      z = tz.toInt();
+      x = tx.toFloat();
+      y = ty.toFloat();
+      z = tz.toFloat();
       // Serial.println(x);
       // Serial.println(y);
       // Serial.println(z);
@@ -493,33 +493,36 @@ void loop() {
       txa = Serial.readStringUntil(';');
       tya = Serial.readStringUntil(';');
       tza = Serial.readStringUntil(';');
-      xa = txa.toInt();
-      ya = tya.toInt();
-      za = tza.toInt();
-      xb = txb.toInt();
-      yb = tyb.toInt();
-      zb = tzb.toInt();
+      xa = txa.toFloat();
+      ya = tya.toFloat();
+      za = tza.toFloat();
+      txb = Serial.readStringUntil(';');
+      tyb = Serial.readStringUntil(';');
+      tzb = Serial.readStringUntil('\n'); 
+      xb = txb.toFloat();
+      yb = tyb.toFloat();
+      zb = tzb.toFloat();
       myRobot.line(xa, ya, za, xb, yb, zb);
     }
     if (lenh == "circle") {
       txa = Serial.readStringUntil(';');
       tya = Serial.readStringUntil(';');
       tza = Serial.readStringUntil(';');
-      xa = txa.toInt();
-      ya = tya.toInt();
-      za = tza.toInt();
+      xa = txa.toFloat();
+      ya = tya.toFloat();
+      za = tza.toFloat();
       txb = Serial.readStringUntil(';');
       tyb = Serial.readStringUntil(';');
       tzb = Serial.readStringUntil(';');
-      xb = txb.toInt();
-      yb = tyb.toInt();
-      zb = tzb.toInt();
+      xb = txb.toFloat();
+      yb = tyb.toFloat();
+      zb = tzb.toFloat();
       txc = Serial.readStringUntil(';');
       tyc = Serial.readStringUntil(';');
       tzc = Serial.readStringUntil('\n');
-      xc = txc.toInt();
-      yc = tyc.toInt();
-      zc = tzc.toInt();
+      xc = txc.toFloat();
+      yc = tyc.toFloat();
+      zc = tzc.toFloat();
       myRobot.circle(xa, ya, za, xb, yb, zb, xc, yc, zc);
     }
     if (lenh == "qkg") {
