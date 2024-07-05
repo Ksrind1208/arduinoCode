@@ -1,14 +1,14 @@
-#include <Servo.h>  // Thư viện điều khiển servo
+#include <Servo.h>  
 #define pi 3.14
 #define l3 8
 #define l2 8
-// Khai báo đối tượng myservo dùng để điều khiển servo
+
 Servo myservo1;
 Servo myservo2;
 Servo myservo3;
 Servo myservo4;
 
-int servoPin1 = 9;  // Khai báo chân điều khiển servo
+int servoPin1 = 9;  
 int servoPin2 = 10;
 int servoPin3 = 11;
 int servoPin4 = 12;
@@ -81,7 +81,7 @@ class Robot{
     int currentAngle3 = myservo3.read();
     int currentAngle4 = myservo4.read();
     q2 = 90 - currentAngle2;
-    q3 = -(105 + q2 - currentAngle3);
+    q3 = -(125 + q2 - currentAngle3);
     x = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * cos(q1 * pi / 180);
     y = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * sin(q1 * pi / 180);
     z = l2 * sin(q2 * pi / 180) + l3 * sin((q2 + q3) * pi / 180) + 6.5;
@@ -98,7 +98,7 @@ class Robot{
     int currentAngle3 = myservo3.read();
     int currentAngle4 = myservo4.read();
     q2 = 90 - currentAngle2;
-    q3 = -(105 + q2 - currentAngle3);
+    q3 = -(125 + q2 - currentAngle3);
     x = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * cos(q1 * pi / 180);
     y = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * sin(q1 * pi / 180);
     z = l2 * sin(q2 * pi / 180) + l3 * sin((q2 + q3) * pi / 180) + 6.5;
@@ -110,7 +110,7 @@ class Robot{
     int currentAngle3 = myservo3.read();
     int currentAngle4 = myservo4.read();
     q2 = 90 - currentAngle2;
-    q3 = -(105 + q2 - currentAngle3);
+    q3 = -(125 + q2 - currentAngle3);
     x = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * cos(q1 * pi / 180);
     y = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * sin(q1 * pi / 180);
     z = l2 * sin(q2 * pi / 180) + l3 * sin((q2 + q3) * pi / 180) + 6.5;
@@ -122,7 +122,7 @@ class Robot{
     int currentAngle3 = myservo3.read();
     int currentAngle4 = myservo4.read();
     q2 = 90 - currentAngle2;
-    q3 = -(105 + q2 - currentAngle3);
+    q3 = -(125 + q2 - currentAngle3);
     x = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * cos(q1 * pi / 180);
     y = (l2 * cos(q2 * pi / 180) + l3 * cos((q2 + q3) * pi / 180)) * sin(q1 * pi / 180);
     z = l2 * sin(q2 * pi / 180) + l3 * sin((q2 + q3) * pi / 180) + 6.5;
@@ -131,26 +131,26 @@ class Robot{
     void home() {
     myservo1.write(90);
     myservo2.write(20);
-    myservo3.write(50);
+    myservo3.write(70);
     myservo4.write(5);
     }
     void moveServo(Servo &servo, int currentAngle, int targetAngle) {
     if (currentAngle < targetAngle) {
       for (int angle = currentAngle; angle <= targetAngle; angle++) {
         servo.write(angle);
-        delay(5);  // Điều chỉnh tốc độ quay (tăng giá trị để quay chậm hơn)
+        delay(5);  
       }
     } else {
       for (int angle = currentAngle; angle >= targetAngle; angle--) {
         servo.write(angle);
-        delay(5);  // Điều chỉnh tốc độ quay (tăng giá trị để quay chậm hơn)
+        delay(5);  
       }
     }
     }
 
     void q(float q1, float q2, float q3, float taygap) {
-    if ((q1 > 180 || q1 < 0) || (q2 < 0 || q2 > 90) || (q3 < 10 || q3 > 140) || (taygap < 5 || taygap > 90)) {
-      // Serial.println("sai roi nhap lai di thang cho");
+    if ((q1 > 180 || q1 < 0) || (q2 < 0 || q2 > 90) || (q3 < 55 || q3 > 180) || (taygap < 5 || taygap > 90)) {
+      Serial.println("sai goc nhap");
     } else {
       int currentAngle1 = myservo1.read();
       int currentAngle2 = myservo2.read();
@@ -171,34 +171,12 @@ class Robot{
     float x2 = sqrt(a*a+b*b);
     float r = sqrt(sq(x2) + sq(c));
     float D = (sq(r) - sq(l3) - sq(l2)) / (2 * l3 * l2);
-    //float q3 = -abs(atan(8-sqrt(1 - sq(D))/ D));
     double q3=-abs(acos(D));
     float q2 = atan(c/ x2) - q3 / 2;
-    // Serial.print("x2 = x / cos(q1) la: ");
-    // Serial.println(x2);
-    // Serial.print("r = sqrt(x2*x2 + z*z) la: ");
-    // Serial.println(r);
-    // Serial.print("D = (r*r - l3*l3 - l2*l2) / (2 * l3 * l2) la: ");
-    // Serial.println(D);
-    // Serial.print("goc q23 la: ");
-    // Serial.println(atan(c / x2));
-    // Serial.print("q1 theo atan(b/a) la: ");
-    // Serial.println(atan(b / a) * 180 / pi);
-    // Serial.print("q1 truoc khi chuyen la: ");
-    // Serial.println(q1 * 180 / pi);
-    // Serial.print("q2 = atan2(c, x2) - q3 / 2 truoc khi chuyen la: ");
-    // Serial.println(q2 * 180 / pi);
-    // Serial.print("q3 = atan2(-sqrt(1 - sq(D)), D) truoc khi chuyen la: ");
-    // Serial.println(q3 * 180 / pi);
+
     q1 = q1 * 180 / pi;
-    q3 = 105 + q2 * 180 / pi + q3 * 180 / pi;
+    q3 = 125 + q2 * 180 / pi + q3 * 180 / pi;
     q2 = 90 - q2 * 180 / pi;
-    // Serial.print(round(q1));
-    // Serial.print(" ");
-    // Serial.print(round(q2));
-    // Serial.print(" ");
-    // Serial.print(round(q3));
-    // Serial.println(" ");
 
     q(round(q1), round(q2), round(q3), myservo4.read());
     }
@@ -207,41 +185,19 @@ class Robot{
     float x2 = sqrt(a*a+b*b);
     float r = sqrt(sq(x2) + sq(c));
     float D = (sq(r) - sq(l3) - sq(l2)) / (2 * l3 * l2);
-    //float q3 = -abs(atan(8-sqrt(1 - sq(D))/ D));
     double q3=-abs(acos(D));
     float q2 = atan(c/ x2) - q3 / 2;
-    // Serial.print("x2 = x / cos(q1) la: ");
-    // Serial.println(x2);
-    // Serial.print("r = sqrt(x2*x2 + z*z) la: ");
-    // Serial.println(r);
-    // Serial.print("D = (r*r - l3*l3 - l2*l2) / (2 * l3 * l2) la: ");
-    // Serial.println(D);
-    // Serial.print("goc q23 la: ");
-    // Serial.println(atan(c / x2));
-    // Serial.print("q1 theo atan(b/a) la: ");
-    // Serial.println(atan(b / a) * 180 / pi);
-    // Serial.print("q1 truoc khi chuyen la: ");
-    // Serial.println(q1 * 180 / pi);
-    // Serial.print("q2 = atan2(c, x2) - q3 / 2 truoc khi chuyen la: ");
-    // Serial.println(q2 * 180 / pi);
-    // Serial.print("q3 = atan2(-sqrt(1 - sq(D)), D) truoc khi chuyen la: ");
-    // Serial.println(q3 * 180 / pi);
+
     q1 = q1 * 180 / pi;
-    q3 = 105 + q2 * 180 / pi + q3 * 180 / pi;
+    q3 = 125 + q2 * 180 / pi + q3 * 180 / pi;
     q2 = 90 - q2 * 180 / pi;
-    // Serial.print(round(q1));
-    // Serial.print(" ");
-    // Serial.print(round(q2));
-    // Serial.print(" ");
-    // Serial.print(round(q3));
-    // Serial.println(" ");
 
     q(round(q1), round(q2), round(q3), myservo4.read());
     }
     void line(float xa, float ya, float za, float xb, float yb, float zb) {
       kg(xa, ya, za);
       delay(500);
-      for (float t = 0; t <= 1.0; t += 0.1) {  // Chia nhỏ đường thẳng thành các đoạn nhỏ
+      for (float t = 0; t <= 1.0; t += 0.1) {  
         digitalWrite(trigPin, LOW);
         delayMicroseconds(2);
         digitalWrite(trigPin, HIGH);
@@ -261,7 +217,6 @@ class Robot{
           distance = (duration / 2) * 0.0343;
         } else {
           resumeAllServos();
-          // Serial.println("hd lai ne....");
         }
         float xt = xa + (xb - xa) * t;
         float yt = ya + (yb - ya) * t;
@@ -285,36 +240,26 @@ class Robot{
     float d = x3 - x1;
     float e = y3 - y1;
     float f = z3 - z1;
-    // Hệ số mặt phẳng (Ax + By + Cz = D)
+
     float A = b * f - c * e;
     float B = c * d - a * f;
     float C = a * e - b * d;
     float D = A * x1 + B * y1 + C * z1;
-    // Serial.print(" (");
-    // Serial.print(A);
-    // Serial.print(", ");
-    // Serial.print(B);
-    // Serial.print(", ");
-    // Serial.print(C);
-    // Serial.print(", ");
-    // Serial.print(D);
-    // Serial.println(")");
 
-    // Trung điểm của các đoạn thẳng AB, AC
     float xab = (x1 + x2) / 2;
     float yab = (y1 + y2) / 2;
     float zab = (z1 + z2) / 2;
     float xac = (x1 + x3) / 2;
     float yac = (y1 + y3) / 2;
     float zac = (z1 + z3) / 2;
-    // Vector pháp tuyến của mặt phẳng
+
     float nx = x2 - x1;
     float ny = y2 - y1;
     float nz = z2 - z1;
 
     float cosineTheta = C / sqrt(A * A + B * B + C * C);
 
-    // Phương trình đường tròn
+ 
     float H = 2 * (x1 * (y2 - y3) + x2 * (y3 - y1) + x3 * (y1 - y2));
     float xc = ((x1 * x1 + y1 * y1) * (y2 - y3) + (x2 * x2 + y2 * y2) * (y3 - y1) + (x3 * x3 + y3 * y3) * (y1 - y2)) / H;
     float yc = ((x1 * x1 + y1 * y1) * (x3 - x2) + (x2 * x2 + y2 * y2) * (x1 - x3) + (x3 * x3 + y3 * y3) * (x2 - x1)) / H;
@@ -325,25 +270,17 @@ class Robot{
     float angleAtoC = atan((y3 - yc) / (x3 - xc));
     float angleAtoB = atan((y2 - yc) / (x2 - xc));
 
-    // Đảm bảo rằng góc angleAtoB lớn hơn angleAtoC
+
     if (angleAtoB < angleAtoC) {
       angleAtoB += 2* PI;
     }
-    // Tạo 100 điểm thuộc cung tròn
+
     for (int i = 0; i <= 100; i++) {
       float theta = angleAtoC + (angleAtoB - angleAtoC) * (i / 100.0);
       float px = xc + r * cos(theta) ;
       float py = yc + r * sin(theta) ;
-      float pz = (D - A * px - B * py) / C;  // Ước lượng tọa độ z (nếu cần có sự điều chỉnh tùy thuộc vào mặt phẳng của đường tròn)
-      // Serial.print("tap diem duong tron thu ");
-      // Serial.print(i);
-      // Serial.print(" (");
-      // Serial.print(px);
-      // Serial.print(", ");
-      // Serial.print(py);
-      // Serial.print(", ");
-      // Serial.print(pz);
-      // Serial.println(")");
+      float pz = (D - A * px - B * py) / C;  
+
       kg(px, py, pz+6.5);
     }
     kg(x3,y3,z3+6.5);
@@ -381,7 +318,7 @@ class Robot{
     myservo4.attach(servoPin4);
     }
     void drawArc(float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3) {
-    // Tính trung điểm của cung tròn
+
     float mid1X = (x1 + x2) / 2;
     float mid1Y = (y1 + y2) / 2;
     float mid1Z = (z1 + z2) / 2;
@@ -390,9 +327,9 @@ class Robot{
     float mid2Y = (y2 + y3) / 2;
     float mid2Z = (z2 + z3) / 2;
 
-    // Tính bán kính và trung điểm của cung tròn
+   
     float radius = sqrt(pow(mid2X - mid1X, 2) + pow(mid2Y - mid1Y, 2) + pow(mid2Z - mid1Z, 2));
-    for (float t = 0; t <= 1.0; t += 0.1) {  // Chia nhỏ cung tròn thành các đoạn nhỏ
+    for (float t = 0; t <= 1.0; t += 0.1) {  
       digitalWrite(trigPin, LOW);
       delayMicroseconds(2);
       digitalWrite(trigPin, HIGH);
@@ -412,7 +349,6 @@ class Robot{
         distance = (duration / 2) * 0.0343;
       }
       resumeAllServos();
-      // Serial.println("hd lai ne....");
 
       float xt = (1 - t) * (1 - t) * x1 + 2 * (1 - t) * t * x2 + t * t * x3;
       float yt = (1 - t) * (1 - t) * y1 + 2 * (1 - t) * t * y2 + t * t * y3;
@@ -425,16 +361,16 @@ class Robot{
 };
 Robot myRobot(l2,l3);
 void setup() {
-  // Cài đặt chức năng điều khiển servo cho chân servoPin
+
   myservo1.attach(servoPin1);
   myservo2.attach(servoPin2);
   myservo3.attach(servoPin3);
   myservo4.attach(servoPin4);
   myRobot.home();
-  Serial.begin(9600);  // Mở giao tiếp Serial ở baudrate 9600
+  Serial.begin(9600);  
   pinMode(trigPin, OUTPUT);
   pinMode(echoPin, INPUT);
-  //attachInterrupt(0,ngat,RISING);
+
 }
 
 void loop() {
@@ -450,16 +386,15 @@ void loop() {
     myRobot.ngat();
   } else {
     myRobot.resumeAllServos();
-    //Serial.println("hd lai ne....");
+
   }
-  while (Serial.available() > 0)  //nếu có dữ liệu truyền tới thì vào làm các lệnh sau
+  while (Serial.available() > 0)  
   {
 
     lenh = Serial.readStringUntil(':');
     if (lenh == "q1") {
     }
     if (lenh == "home") {
-      // Serial.println("home");
       myRobot.home();
     }
     if (lenh == "q") {
@@ -471,10 +406,6 @@ void loop() {
       q2 = tq2.toInt();
       q3 = tq3.toInt();
       taygap = ttaygap.toInt();
-      // Serial.println(q1);
-      // Serial.println(q2);
-      // Serial.println(q3);
-      // Serial.println(taygap);
       myRobot.q(q1, q2, q3, taygap);
     }
     if (lenh == "kg") {
@@ -484,9 +415,6 @@ void loop() {
       x = tx.toFloat();
       y = ty.toFloat();
       z = tz.toFloat();
-      // Serial.println(x);
-      // Serial.println(y);
-      // Serial.println(z);
       myRobot.kg(x, y, z);
     }
     if (lenh == "line") {
@@ -543,20 +471,6 @@ void loop() {
       z2=tz2.toFloat();
       myRobot.gap(x1,y1,z1,x2,y2,z2);
     }
-    // if (lenh == "teaching") {  
-    //   while(1){
-    //     autoString=Serial.readStringUntil(';');
-    //     if(autoString==""){
-    //       break;
-    //     }
-    //     autoStorage[countAuto]=autoString.toFloat();
-    //     //Serial.println(autoStorage[countAuto]);
-    //     countAuto++;
-    //   }
-    //   for(int i=0;i<countAuto;i++){
-    //     Serial.println(autoStorage[i]);
-    //   }
-    // }
       if (lenh == "teaching") {  
       autoString = Serial.readStringUntil('\n'); // Read the entire command after "teaching:"
       int start = 0;
@@ -572,6 +486,20 @@ void loop() {
       delay(2000);
       while(1){
         for(int i=0;i<countAuto-3;i+=4){
+                float duration = pulseIn(echoPin, HIGH);
+      float distance = (duration / 2) * 0.0343;
+      while (distance < 10.0) {
+        myRobot.stopAllServos();
+        myRobot.ngat();
+        digitalWrite(trigPin, LOW);
+        delayMicroseconds(2);
+        digitalWrite(trigPin, HIGH);
+        delayMicroseconds(10);
+        digitalWrite(trigPin, LOW);
+        duration = pulseIn(echoPin, HIGH);
+        distance = (duration / 2) * 0.0343;
+      }
+      myRobot.resumeAllServos();
           myRobot.q(autoStorage[i],autoStorage[i+1],autoStorage[i+2],autoStorage[i+3]);
           delay(1000);
         }
